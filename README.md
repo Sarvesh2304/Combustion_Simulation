@@ -78,4 +78,4 @@ def visualize_results():
 ## Repository
 
 - Name: PropellantCombustionSimulation
-- GitHub: [PropellantCombustionSimulation](https://github.com/Sarvesh2304/PropellantCombustionSimulation)
+- GitHub: [Combustion_Simulation](https://github.com/Sarvesh2304/Combustion_Simulation)
