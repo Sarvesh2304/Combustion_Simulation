@@ -1,6 +1,6 @@
-# PropellantCombustionSimulation
+# Combustion Simulation for Rocket Propellants
 
-Physics-informed propellant combustion and nozzle performance simulator with an optional TensorFlow surrogate for specific impulse. Computes exhaust velocity, thrust, Isp, temperature/pressure profiles, wall heating, and stability spectrum for multiple propellants. Provides a simple CLI, saves plots, and caches surrogate models under `models/`.
+This project simulates combustion and flow characteristics of various rocket propellants using finite-rate chemistry and real gas effects.
 
 ## Features
 
@@ -12,7 +12,6 @@ Physics-informed propellant combustion and nozzle performance simulator with an 
 - Thrust and specific impulse calculations
 - Heat flux analysis
 - Combustion stability analysis
-- Optional NN surrogate for Isp prediction (TensorFlow + scikit-learn)
 
 ## Supported Propellants
 
@@ -50,28 +49,27 @@ Run the base simulation (analytic model only):
 python src/combustion_simulation.py
 ```
 
-Use the NN surrogate for specific impulse (trains once and caches under `models/`):
-```bash
-python src/combustion_simulation.py --use-surrogate
-```
+This will generate visualizations comparing different propellants and their performance metrics. 
 
-Force retraining of the surrogate and overwrite cached artifacts:
-```bash
-python src/combustion_simulation.py --use-surrogate --retrain
-```
+```python
+import matplotlib
+matplotlib.use('Agg')  # Add this line at the top if running in headless mode
 
-This will print a comparison table and save plots for key metrics in the current directory.
-
-### Notes
-- In headless environments, Matplotlib will automatically save plots (no display needed). If required, you can explicitly set the backend by adding `matplotlib.use('Agg')` near the top of your script.
-- Surrogate artifacts are saved to `models/surrogate.keras` and `models/scaler.pkl` by default; paths can be overridden with `--model-path` and `--scaler-path`.
-
-## Outputs
-- Console table of per-fuel metrics: exhaust velocity, thrust, Isp, equilibrium temperature, burn time, wall temperature
-- PNG plots saved in the working directory for core metrics
-- Optional cached surrogate model and scaler under `models/`
-
-## Repository
-- Name: PropellantCombustionSimulation
-- GitHub: [PropellantCombustionSimulation](https://github.com/Sarvesh2304/PropellantCombustionSimulation)
-
+def visualize_results():
+    fuels = ["MMH + N2O4", "AF-M3125E", "LOX + Methane", "G.prop"]
+    results = [combustion_simulation(fuel) for fuel in fuels]
+    
+    labels = ["Exhaust Velocity (m/s)", "Thrust (N)", "Specific Impulse (s)", "Equilibrium Temperature (K)", "Burn Time (s)", "Wall Temperature (K)"]
+    for i, label in enumerate(labels):
+        values = [res[label] for res in results]
+        plt.figure(figsize=(8, 4))
+        plt.bar(fuels, values, color=['blue', 'green', 'red', 'purple'])
+        plt.ylabel(label)
+        plt.title(f"Comparison of {label} for Different Fuels")
+        plt.tight_layout()
+        plt.savefig(f"{label.replace(' ', '_')}.png")
+        plt.close()
+    
+    df = pd.DataFrame(results)[["Fuel"] + labels]
+    print(df.to_string(index=False))
+``` 
