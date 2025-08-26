@@ -1,4 +1,4 @@
-# Combustion Simulation for Rocket Propellants
+# PropellantCombustionSimulation
 
 This project simulates combustion and flow characteristics of various rocket propellants using finite-rate chemistry and real gas effects.
 
@@ -12,6 +12,7 @@ This project simulates combustion and flow characteristics of various rocket pro
 - Thrust and specific impulse calculations
 - Heat flux analysis
 - Combustion stability analysis
+- Optional NN surrogate for Isp prediction (TensorFlow + scikit-learn)
 
 ## Supported Propellants
 
@@ -73,3 +74,8 @@ def visualize_results():
     df = pd.DataFrame(results)[["Fuel"] + labels]
     print(df.to_string(index=False))
 ``` 
+
+## Repository
+
+- Name: PropellantCombustionSimulation
+- GitHub: [PropellantCombustionSimulation](https://github.com/Sarvesh2304/PropellantCombustionSimulation)
