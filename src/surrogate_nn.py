@@ -17,15 +17,14 @@ def generate_synthetic_data(n_samples=5000, random_seed=0):
     M_kg_per_kmol = M_g_per_mol
     R_universal = 8314.0
     R_specific = R_universal / M_kg_per_kmol  # J/(kg·K)
-    Pe_over_P0 = 1.0 / 20.0  # expansion ratio surrogate assumption
+    # Match main model: Pe equals ambient (sea level)
+    Pe_bar = 1.01325
+    # Pressure ratio Pe/P0 depends on chamber pressure
+    Pr = Pe_bar / chamber_pressure_bar
 
-    # Gamma varies mildly with temperature; clip to physical range
-    gamma = 1.4 - 0.12 * (chamber_temperature_K / 4000.0)
-    gamma = np.clip(gamma, 1.12, 1.35)
-
-    # Convert P0 to Pa
-    P0_Pa = chamber_pressure_bar * 1e5
-    Pr = Pe_over_P0
+    # Gamma varies mildly with temperature; clip to physical range similar to main
+    gamma = 1.4 - 0.1 * (chamber_temperature_K / 3000.0)
+    gamma = np.clip(gamma, 1.15, 1.35)
 
     # Isentropic exit velocity approximation with fixed Pe/P0
     # Ve = sqrt( 2*g/(g-1) * R*T0 * (1 - (Pe/P0)^((g-1)/g)) )
